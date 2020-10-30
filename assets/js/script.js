@@ -1,3 +1,6 @@
+var apiKey = "db9e17c61d09c41192d5879ee37e6413";
+console.log(apiKey);
+
 // GIVEN a weather dashboard with form inputs
 // WHEN I search for a city
 // THEN I am presented with current and future conditions for that city and that city is added to the search history
