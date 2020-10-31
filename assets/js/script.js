@@ -4,10 +4,11 @@ var currentHumidityEl = document.querySelector(".humidity"); 4
 var currentWindEl = document.querySelector(".wind-speed");
 var currentUVEl = document.querySelector(".uv-index");
 var searchBtnEl = document.querySelector("#search-btn");
+var historyEl = document.querySelector("#search-history");
 var searchHistory = JSON.parse(localStorage.getItem("search")) || [];
 console.log(searchHistory);
 
-// var apiKey = "db9e17c61d09c41192d5879ee37e6413";
+var apiKey = "db9e17c61d09c41192d5879ee37e6413";
 
 // var searchCity = function (event) {
 //   event.preventDefault();
@@ -25,7 +26,7 @@ console.log(searchHistory);
 // searchBtnEl.addEventListener("submit", searchCity);
 
 function loadWeather() {
-  return fetch("https://api.openweathermap.org/data/2.5/weather?id=524901&appid=db9e17c61d09c41192d5879ee37e6413")
+  return fetch("https://api.openweathermap.org/data/2.5/weather?id=524901&appid=" + apiKey)
     .then(function (response) {
       console.log("response", response);
       return response.json();
@@ -41,17 +42,30 @@ searchBtnEl.addEventListener("click", function () {
   var city = currentCityEl.value;
   console.log(city);
   loadWeather(city);
-
   searchHistory.push(city);
   localStorage.setItem("search", JSON.stringify(searchHistory));
+  renderSearchHistory();
+});
 
-})
+function renderSearchHistory() {
+  historyEl.innerHTML = "";
+  for (var i = 0; i < searchHistory.length; i++) {
+    var historyItem = document.createElement("input");
+    historyItem.setAttribute("type", "text");
+    historyItem.setAttribute("readonly", true);
+    historyItem.setAttribute("class", "form-control d-block bg-white");
+    historyItem.setAttribute("value", searchHistory[i]);
+    historyItem.addEventListener("click", function () {
+      loadWeather(historyItem.value);
+    })
+    historyEl.append(historyItem);
+  }
+};
 
 
 // GIVEN a weather dashboard with form inputs
 // WHEN I search for a city
 // THEN I am presented with current and future conditions for that city and that city is added to the search history
-
 
 
 // WHEN I view current weather conditions for that city
@@ -68,12 +82,3 @@ searchBtnEl.addEventListener("click", function () {
 
 // WHEN I click on a city in the search history
 // THEN I am again presented with current and future conditions for that city
-
-
-// var citiesArray;
-// if (localStorage.getItem("citySearches")) {
-//   citiesArray = JSON.parse(localStorage.getItem("citySearches"));
-//   writeSearchHistory(citiesArray);
-// } else {
-//   citiesArray = [];
-// };
