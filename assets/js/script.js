@@ -1,5 +1,35 @@
+var currentCityEl = document.getElementsByClassName("city");
+var currentTempEl = document.getElementsByClassName("temperature");
+var currentHumidityEl = document.getElementsByClassName("humidity"); 4
+var currentWindEl = document.getElementsByClassName("wind-speed");
+var currentUVEl = document.getElementsByClassName("uv-index");
+
 var apiKey = "db9e17c61d09c41192d5879ee37e6413";
 console.log(apiKey);
+
+var weather = {
+  temperature: {
+    value: 18,
+    unit: "fahrenheit"
+  },
+  humidity: {
+    value: "",
+    unit: "%"
+  },
+  windSpeed: {
+    value: "",
+    unit: "MPH"
+  },
+  uvIndex: {
+    vlaue: ""
+  },
+  city: "",
+  iconId: ""
+}
+
+
+var queryUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + apiKey;
+console.log(queryUrl);
 
 // GIVEN a weather dashboard with form inputs
 // WHEN I search for a city
