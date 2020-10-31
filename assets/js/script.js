@@ -1,4 +1,4 @@
-var currentCityEl = document.querySelector(".city");
+var currentCityEl = document.querySelector("#city");
 var currentTempEl = document.querySelector(".temperature");
 var currentHumidityEl = document.querySelector(".humidity"); 4
 var currentWindEl = document.querySelector(".wind-speed");
@@ -12,7 +12,7 @@ var searchBtnEl = document.querySelector("#search-btn");
 
 //   var city = currentCityEl.value.trim();
 //   if (city) {
-//     getWeather(city);
+//     loadWeather(city);
 //     currentCityEl.value = "";
 //   } else {
 //     alert("Please enter a valid city");
@@ -20,24 +20,27 @@ var searchBtnEl = document.querySelector("#search-btn");
 //   console.log(event);
 // }
 
-
-// var getWeather = function (city) {
-//   var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + apiKey;
-
-//   // make a request to the url
-//   fetch(apiUrl).then(function (response) {
-//     response.json().then(function (data) {
-//       console.log(data);
-//     });
-//   });
-// };
-
 // searchBtnEl.addEventListener("submit", searchCity);
+var city = currentCityEl.value;
+function loadWeather() {
+  return fetch("https://api.openweathermap.org/data/2.5/weather?id=524901&appid=db9e17c61d09c41192d5879ee37e6413")
+    .then(function (response) {
+      console.log("response", response);
+      return response.json();
+    })
+    .then(function (json) {
+      console.log(json);
+    });
+}
 
-var promise = fetch("https://api.openweathermap.org/data/2.5/weather")
-  .then(function (response) {
-    console.log("response", response);
-  });
+loadWeather();
+
+searchBtnEl.addEventListener("click", function () {
+  loadWeather(city);
+
+
+})
+
 
 // GIVEN a weather dashboard with form inputs
 // WHEN I search for a city
