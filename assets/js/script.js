@@ -1,39 +1,48 @@
-var currentCityEl = document.getElementsByClassName("city");
-var currentTempEl = document.getElementsByClassName("temperature");
-var currentHumidityEl = document.getElementsByClassName("humidity"); 4
-var currentWindEl = document.getElementsByClassName("wind-speed");
-var currentUVEl = document.getElementsByClassName("uv-index");
+var currentCityEl = document.querySelector(".city");
+var currentTempEl = document.querySelector(".temperature");
+var currentHumidityEl = document.querySelector(".humidity"); 4
+var currentWindEl = document.querySelector(".wind-speed");
+var currentUVEl = document.querySelector(".uv-index");
+var searchBtnEl = document.querySelector("#search-btn");
 
-var apiKey = "db9e17c61d09c41192d5879ee37e6413";
-console.log(apiKey);
+// var apiKey = "db9e17c61d09c41192d5879ee37e6413";
 
-var weather = {
-  temperature: {
-    value: 18,
-    unit: "fahrenheit"
-  },
-  humidity: {
-    value: "",
-    unit: "%"
-  },
-  windSpeed: {
-    value: "",
-    unit: "MPH"
-  },
-  uvIndex: {
-    vlaue: ""
-  },
-  city: "",
-  iconId: ""
-}
+// var searchCity = function (event) {
+//   event.preventDefault();
+
+//   var city = currentCityEl.value.trim();
+//   if (city) {
+//     getWeather(city);
+//     currentCityEl.value = "";
+//   } else {
+//     alert("Please enter a valid city");
+//   }
+//   console.log(event);
+// }
 
 
-var queryUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + apiKey;
-console.log(queryUrl);
+// var getWeather = function (city) {
+//   var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + apiKey;
+
+//   // make a request to the url
+//   fetch(apiUrl).then(function (response) {
+//     response.json().then(function (data) {
+//       console.log(data);
+//     });
+//   });
+// };
+
+// searchBtnEl.addEventListener("submit", searchCity);
+
+var promise = fetch("https://api.openweathermap.org/data/2.5/weather")
+  .then(function (response) {
+    console.log("response", response);
+  });
 
 // GIVEN a weather dashboard with form inputs
 // WHEN I search for a city
 // THEN I am presented with current and future conditions for that city and that city is added to the search history
+
 
 
 // WHEN I view current weather conditions for that city
@@ -50,3 +59,12 @@ console.log(queryUrl);
 
 // WHEN I click on a city in the search history
 // THEN I am again presented with current and future conditions for that city
+
+
+// var citiesArray;
+// if (localStorage.getItem("citySearches")) {
+//   citiesArray = JSON.parse(localStorage.getItem("citySearches"));
+//   writeSearchHistory(citiesArray);
+// } else {
+//   citiesArray = [];
+// };
