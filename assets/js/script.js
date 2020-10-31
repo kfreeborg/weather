@@ -4,6 +4,8 @@ var currentHumidityEl = document.querySelector(".humidity"); 4
 var currentWindEl = document.querySelector(".wind-speed");
 var currentUVEl = document.querySelector(".uv-index");
 var searchBtnEl = document.querySelector("#search-btn");
+var searchHistory = JSON.parse(localStorage.getItem("search")) || [];
+console.log(searchHistory);
 
 // var apiKey = "db9e17c61d09c41192d5879ee37e6413";
 
@@ -21,7 +23,7 @@ var searchBtnEl = document.querySelector("#search-btn");
 // }
 
 // searchBtnEl.addEventListener("submit", searchCity);
-var city = currentCityEl.value;
+
 function loadWeather() {
   return fetch("https://api.openweathermap.org/data/2.5/weather?id=524901&appid=db9e17c61d09c41192d5879ee37e6413")
     .then(function (response) {
@@ -36,8 +38,12 @@ function loadWeather() {
 loadWeather();
 
 searchBtnEl.addEventListener("click", function () {
+  var city = currentCityEl.value;
+  console.log(city);
   loadWeather(city);
 
+  searchHistory.push(city);
+  localStorage.setItem("search", JSON.stringify(searchHistory));
 
 })
 
