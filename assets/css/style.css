@@ -5,5 +5,6 @@
 }
 
 body {
-  background: linear-gradient(rgb(7, 46, 145), rgba(105, 140, 231, 0.699));
+  background: linear-gradient(rgb(3, 32, 105), rgba(105, 140, 231, 0.699));
+  background-attachment: fixed;
 }
