@@ -10,37 +10,54 @@ console.log(searchHistory);
 
 var apiKey = "db9e17c61d09c41192d5879ee37e6413";
 
-// var searchCity = function (event) {
-//   event.preventDefault();
+function loadWeather(city) {
+  // get the value of the input from user
+  var city = currentCityEl.value;
 
-//   var city = currentCityEl.value.trim();
-//   if (city) {
-//     loadWeather(city);
-//     currentCityEl.value = "";
-//   } else {
-//     alert("Please enter a valid city");
-//   }
-//   console.log(event);
-// }
+  // clear input box
+  // $("#city").val("");
 
-// searchBtnEl.addEventListener("submit", searchCity);
+  var todayUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
 
-function loadWeather() {
-  return fetch("https://api.openweathermap.org/data/2.5/weather?id=524901&appid=" + apiKey)
+  $.ajax({
+    url: todayUrl,
+    method: "GET"
+  })
     .then(function (response) {
-      console.log("response", response);
-      return response.json();
+      console.log(response.name)
+      console.log(response.weather[0].icon)
+
+      let tempF = (response.main.temp - 273.15) * 1.80 + 32;
+      console.log(Math.floor(tempF))
+
+      console.log(response.main.humidity)
+
+      console.log(response.wind.speed)
     })
-    .then(function (json) {
-      console.log(json);
-    });
-}
+
+  // return fetch("https://api.openweathermap.org/data/2.5/weather?id=524901&appid=" + apiKey)
+  //   .then(function (response) {
+  //     console.log("response", response);
+  //     return response.json();
+  //   })
+  //   .then(function (json) {
+  //     console.log(json);
+  //   });
+
+
+
+  // today's weather
+
+
+  // forecast
+
+
+};
 
 loadWeather();
 
 searchBtnEl.addEventListener("click", function () {
   var city = currentCityEl.value;
-  console.log(city);
   loadWeather(city);
   searchHistory.push(city);
   localStorage.setItem("search", JSON.stringify(searchHistory));
@@ -52,7 +69,6 @@ function renderSearchHistory() {
   for (var i = 0; i < searchHistory.length; i++) {
     var historyItem = document.createElement("input");
     historyItem.setAttribute("type", "text");
-    historyItem.setAttribute("readonly", true);
     historyItem.setAttribute("class", "form-control d-block bg-white");
     historyItem.setAttribute("value", searchHistory[i]);
     historyItem.addEventListener("click", function () {
