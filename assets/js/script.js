@@ -11,11 +11,7 @@ console.log(searchHistory);
 var apiKey = "db9e17c61d09c41192d5879ee37e6413";
 
 function loadWeather(city) {
-  // get the value of the input from user
   var city = currentCityEl.value;
-
-  // clear input box
-  // $("#city").val("");
 
   var todayUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
 
@@ -24,35 +20,38 @@ function loadWeather(city) {
     method: "GET"
   })
     .then(function (response) {
-      console.log(response.name)
-      console.log(response.weather[0].icon)
-
-      let tempF = (response.main.temp - 273.15) * 1.80 + 32;
-      console.log(Math.floor(tempF))
-
-      console.log(response.main.humidity)
-
-      console.log(response.wind.speed)
+      // console.log(response.name)
+      // console.log(response.weather[0].icon)
+      // let tempF = (response.main.temp - 273.15) * 1.80 + 32;
+      // console.log(Math.floor(tempF))
+      // console.log(response.main.humidity)
+      // console.log(response.wind.speed)
+      loadCurrentConditions(response);
+      // loadForecast(response);
     })
-
-  // return fetch("https://api.openweathermap.org/data/2.5/weather?id=524901&appid=" + apiKey)
-  //   .then(function (response) {
-  //     console.log("response", response);
-  //     return response.json();
-  //   })
-  //   .then(function (json) {
-  //     console.log(json);
-  //   });
-
-
-
-  // today's weather
-
-
-  // forecast
-
-
 };
+
+
+
+// today's weather
+function loadCurrentConditions(response) {
+  var tempF = Math.floor((response.main.temp - 273.15) * 1.80 + 32);
+  $(".temperature").append(tempF + "°F");
+  // console.log(Math.floor(tempF))
+
+
+  var name = response.name;
+  $(".city").append(name);
+
+  var humidity = response.main.humidity;
+  $(".humidity").append(humidity + "%");
+
+
+
+}
+
+// forecast
+
 
 loadWeather();
 
