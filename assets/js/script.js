@@ -72,10 +72,19 @@ function loadCurrentConditions(response) {
 
 // forecast
 function loadForecast(response) {
+  var forecastDays = response.list;
+  console.log(forecastDays)
 
+  for (var i = 0; i < forecastDays.length; i++) {
+    var day = Number(forecastDays[i].dt_txt.split('-')[2].split(' ')[0]);
+    var hour = forecastDays[i].dt_txt.split('-')[2].split(' ')[1];
+    console.log(day);
+    console.log(hour);
+
+
+  }
 };
 
-//loadWeather();
 
 searchBtnEl.addEventListener("click", function () {
   var city = currentCityEl.value;
