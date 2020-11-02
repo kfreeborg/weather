@@ -10,6 +10,8 @@ var searchHistory = JSON.parse(localStorage.getItem("search")) || [];
 console.log(searchHistory);
 
 var apiKey = "db9e17c61d09c41192d5879ee37e6413";
+var lat;
+var lon;
 
 function loadWeather(city) {
   var city = currentCityEl.value;
@@ -17,18 +19,29 @@ function loadWeather(city) {
   var todayUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
   var forecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + apiKey;
 
+
   $.ajax({
     url: todayUrl,
     method: "GET"
   })
     .then(function (response) {
-      // console.log(response.name)
-      // console.log(response.weather[0].icon)
-      // let tempF = (response.main.temp - 273.15) * 1.80 + 32;
-      // console.log(Math.floor(tempF))
-      // console.log(response.main.humidity)
-      // console.log(response.wind.speed)
       loadCurrentConditions(response);
+
+      var lat = response.coord.lat;
+      var lon = response.coord.lon;
+      console.log(lat, lon)
+
+      var uvUrl = "https://api.openweathermap.org/data/2.5/uvi/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&cnt=1";
+
+      $.ajax({
+        url: uvUrl,
+        method: "GET"
+      })
+        .then(function (uvIndex) {
+          var uvIndexDisplay = $("<button>");
+          uvIndexDisplay.addClass("btn btn-danger");
+          $(".uv-index").append(uvIndexDisplay.text(uvIndex[0].value));
+        })
     })
 
   $.ajax({
@@ -36,8 +49,6 @@ function loadWeather(city) {
     method: "GET"
   })
     .then(function (response) {
-      console.log(response);
-
       loadForecast(response);
     })
 };
@@ -52,7 +63,10 @@ function loadCurrentConditions(response) {
   $(".temperature").append(tempF + "°F");
 
   var cityDate = date.toLocaleDateString("en-US");
-
+  var image = $("#today_icon_div").attr({
+    "src": "http://openweathermap.org/img/w/" + response.weather[0].icon + ".png",
+    "height": "100px", "width": "100px"
+  });
   var name = response.name;
   $(".city").append(name + " " + cityDate);
 
@@ -62,15 +76,7 @@ function loadCurrentConditions(response) {
   var windSpeed = response.wind.speed
   $(".wind-speed").append(windSpeed + "MPH");
 
-  var lat = response.coord.lat;
-  var lon = response.coord.lon;
-  console.log(lat, lon)
 
-  var uvIndex = 6
-  $(".uv-index").append(uvIndex);
-  if (uvIndex < 7) {
-    $(this).next("span").addClass("badge-danger");
-  }
 }
 
 // forecast
@@ -110,7 +116,6 @@ searchBtnEl.addEventListener("click", function (event) {
   loadWeather(city);
   searchHistory.push(city);
   localStorage.setItem("search", JSON.stringify(searchHistory));
-
   renderSearchHistory();
 });
 
@@ -151,10 +156,6 @@ clearEl.addEventListener("click", function () {
 
 // WHEN I view the UV index
 // THEN I am presented with a color that indicates whether the conditions are favorable, moderate, or severe
-
-
-// WHEN I view future weather conditions for that city
-// THEN I am presented with a 5 - day forecast that displays the date, an icon representation of weather conditions, the temperature, and the humidity
 
 
 // WHEN I click on a city in the search history
