@@ -88,7 +88,7 @@ function loadForecast(response) {
       var tempF = Math.floor((forecastDays[i].main.temp - 273.15) * 1.80 + 32);
 
 
-      var card = $("<div>").addClass("card col-md-2 ml-4 bg-primary text-white");
+      var card = $("<div>").addClass("card col bg-light rounded text-dark m-1");
       var cardBody = $("<div>").addClass("card-body p-3 forecastBody")
       var cityDate = $("<h4>").addClass("card-title").text(date.toLocaleDateString('en-US'));
       var temperature = $("<p>").addClass("card-text forecastTemp").text("Temperature: " + tempF + " °F");
