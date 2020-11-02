@@ -132,6 +132,7 @@ function renderSearchHistory() {
 
 clearEl.addEventListener("click", function () {
   searchHistory = [];
+  localStorage.clear();
   renderSearchHistory();
 });
 
