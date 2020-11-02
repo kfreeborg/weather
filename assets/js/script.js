@@ -14,6 +14,7 @@ function loadWeather(city) {
   var city = currentCityEl.value;
 
   var todayUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
+  var forecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + apiKey;
 
   $.ajax({
     url: todayUrl,
@@ -27,7 +28,16 @@ function loadWeather(city) {
       // console.log(response.main.humidity)
       // console.log(response.wind.speed)
       loadCurrentConditions(response);
-      // loadForecast(response);
+    })
+
+  $.ajax({
+    url: forecastUrl,
+    method: "GET"
+  })
+    .then(function (response) {
+      console.log(response);
+
+      loadForecast(response);
     })
 };
 
@@ -35,31 +45,44 @@ function loadWeather(city) {
 
 // today's weather
 function loadCurrentConditions(response) {
+  var date = new Date();
+
   var tempF = Math.floor((response.main.temp - 273.15) * 1.80 + 32);
   $(".temperature").append(tempF + "°F");
-  // console.log(Math.floor(tempF))
-
 
   var name = response.name;
-  $(".city").append(name);
+  $(".city").append(name + " " + date);
 
   var humidity = response.main.humidity;
   $(".humidity").append(humidity + "%");
 
+  var windSpeed = response.wind.speed
+  $(".wind-speed").append(windSpeed + "MPH");
 
+  // var lat = response.data.coord.lat;
+  // var lon = response.data.coord.lon;
+  // console.log(lat, lon)
 
+  var uvIndex = 6
+  $(".uv-index").append(uvIndex);
+  if (uvIndex < 7) {
+    $(this).next("span").addClass("badge-danger");
+  }
 }
 
 // forecast
+function loadForecast(response) {
 
+};
 
-loadWeather();
+//loadWeather();
 
 searchBtnEl.addEventListener("click", function () {
   var city = currentCityEl.value;
   loadWeather(city);
   searchHistory.push(city);
   localStorage.setItem("search", JSON.stringify(searchHistory));
+
   renderSearchHistory();
 });
 
@@ -68,12 +91,18 @@ function renderSearchHistory() {
   for (var i = 0; i < searchHistory.length; i++) {
     var historyItem = document.createElement("input");
     historyItem.setAttribute("type", "text");
+    // historyItem.setAttribute("readonly", true);
     historyItem.setAttribute("class", "form-control d-block bg-white");
     historyItem.setAttribute("value", searchHistory[i]);
     historyItem.addEventListener("click", function () {
       loadWeather(historyItem.value);
+
     })
     historyEl.append(historyItem);
+
+    // if (searchHistory.length > 0) {
+    //   loadWeather(searchHistory[searchHistory.length - 1]);
+    // }
   }
 };
 
