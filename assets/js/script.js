@@ -50,10 +50,10 @@ function loadCurrentConditions(response) {
   var tempF = Math.floor((response.main.temp - 273.15) * 1.80 + 32);
   $(".temperature").append(tempF + "°F");
 
-  var cityDate = 
+  var cityDate = date.toLocaleDateString("en-US");
 
   var name = response.name;
-  $(".city").append(name + " " + date);
+  $(".city").append(name + " " + cityDate);
 
   var humidity = response.main.humidity;
   $(".humidity").append(humidity + "%");
