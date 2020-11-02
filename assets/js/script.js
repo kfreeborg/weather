@@ -4,6 +4,7 @@ var currentHumidityEl = document.querySelector(".humidity"); 4
 var currentWindEl = document.querySelector(".wind-speed");
 var currentUVEl = document.querySelector(".uv-index");
 var searchBtnEl = document.querySelector("#search-btn");
+var clearEl = document.getElementById("clear-history");
 var historyEl = document.querySelector("#search-history");
 var searchHistory = JSON.parse(localStorage.getItem("search")) || [];
 console.log(searchHistory);
@@ -61,9 +62,9 @@ function loadCurrentConditions(response) {
   var windSpeed = response.wind.speed
   $(".wind-speed").append(windSpeed + "MPH");
 
-  // var lat = response.data.coord.lat;
-  // var lon = response.data.coord.lon;
-  // console.log(lat, lon)
+  var lat = response.coord.lat;
+  var lon = response.coord.lon;
+  console.log(lat, lon)
 
   var uvIndex = 6
   $(".uv-index").append(uvIndex);
@@ -80,8 +81,8 @@ function loadForecast(response) {
   for (var i = 0; i < forecastDays.length; i++) {
     var day = Number(forecastDays[i].dt_txt.split('-')[2].split(' ')[0]);
     var hour = forecastDays[i].dt_txt.split('-')[2].split(' ')[1];
-    console.log(day);
-    console.log(hour);
+    // console.log(day);
+    // console.log(hour);
 
     if (forecastDays[i].dt_txt.indexOf("12:00:00") !== -1) {
       var tempF = Math.floor((forecastDays[i].main.temp - 273.15) * 1.80 + 32);
@@ -103,7 +104,8 @@ function loadForecast(response) {
 };
 
 
-searchBtnEl.addEventListener("click", function () {
+searchBtnEl.addEventListener("click", function (event) {
+  event.preventDefault();
   var city = currentCityEl.value;
   loadWeather(city);
   searchHistory.push(city);
@@ -131,6 +133,11 @@ function renderSearchHistory() {
     // }
   }
 };
+
+clearEl.addEventListener("click", function () {
+  searchHistory = [];
+  renderSearchHistory();
+});
 
 
 // GIVEN a weather dashboard with form inputs
