@@ -50,6 +50,8 @@ function loadCurrentConditions(response) {
   var tempF = Math.floor((response.main.temp - 273.15) * 1.80 + 32);
   $(".temperature").append(tempF + "°F");
 
+  var cityDate = 
+
   var name = response.name;
   $(".city").append(name + " " + date);
 
@@ -72,8 +74,8 @@ function loadCurrentConditions(response) {
 
 // forecast
 function loadForecast(response) {
+  var date = new Date();
   var forecastDays = response.list;
-  console.log(forecastDays)
 
   for (var i = 0; i < forecastDays.length; i++) {
     var day = Number(forecastDays[i].dt_txt.split('-')[2].split(' ')[0]);
@@ -81,7 +83,22 @@ function loadForecast(response) {
     console.log(day);
     console.log(hour);
 
+    if (forecastDays[i].dt_txt.indexOf("12:00:00") !== -1) {
+      var tempF = Math.floor((forecastDays[i].main.temp - 273.15) * 1.80 + 32);
 
+
+      var card = $("<div>").addClass("card col-md-2 ml-4 bg-primary text-white");
+      var cardBody = $("<div>").addClass("card-body p-3 forecastBody")
+      var cityDate = $("<h4>").addClass("card-title").text(date.toLocaleDateString('en-US'));
+      var temperature = $("<p>").addClass("card-text forecastTemp").text("Temperature: " + tempF + " °F");
+      var humidity = $("<p>").addClass("card-text forecastHumidity").text("Humidity: " + forecastDays[i].main.humidity + "%");
+
+      var image = $("<img>").attr("src", "https://openweathermap.org/img/w/" + forecastDays[i].weather[0].icon + ".png")
+
+      cardBody.append(cityDate, image, temperature, humidity);
+      card.append(cardBody);
+      $(".forecast").append(card);
+    }
   }
 };
 
